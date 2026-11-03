@@ -1,0 +1,11 @@
+{
+  "version": "0.1.0-ios-preview",
+  "target": "iPhone 13 Pro / iOS 16+",
+  "windowsSourcePackagePrepared": true,
+  "swiftTestsExecuted": false,
+  "xcodeBuildExecuted": false,
+  "ipaProduced": false,
+  "signedForDevice": false,
+  "physicalDeviceTested": false,
+  "nextStep": "Upload this isolated source package to a public GitHub repository and run the macOS workflow. Do not upload Android signing material."
+}
