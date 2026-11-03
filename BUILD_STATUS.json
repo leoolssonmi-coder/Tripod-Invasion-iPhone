@@ -2,10 +2,13 @@
   "version": "0.1.0-ios-preview",
   "target": "iPhone 13 Pro / iOS 16+",
   "windowsSourcePackagePrepared": true,
-  "swiftTestsExecuted": false,
-  "xcodeBuildExecuted": false,
-  "ipaProduced": false,
+  "swiftTestsExecuted": true,
+  "coreTestsPassed": 14,
+  "xcodeBuildExecuted": true,
+  "ipaProduced": true,
   "signedForDevice": false,
   "physicalDeviceTested": false,
-  "nextStep": "Upload this isolated source package to a public GitHub repository and run the macOS workflow. Do not upload Android signing material."
+  "workflow": "https://github.com/leoolssonmi-coder/Tripod-Invasion-iPhone/actions/runs/41701180041",
+  "ipaSHA256": "a18be38a09a09cc5d894f1e5878ac7ab9272712228e3e72d0e147ea4e6d9a7fd",
+  "nextStep": "Sign locally using AltStore Classic and test on the physical iPhone."
 }
