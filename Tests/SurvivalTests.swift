@@ -13,7 +13,8 @@ final class SurvivalTests:XCTestCase {
     func testTrackingLossFreezesTimeAndDamage(){let g=make();advance(g,100,reliable:false);XCTAssertEqual(g.elapsed,0);XCTAssertEqual(g.health,3);XCTAssertTrue(g.paused)}
     func testPausedCannotShoot(){let g=make();advance(g,1,reliable:false);g.shoot(player:.zero,forward:V3(0,0,-1),blocked:{_,_ in false});XCTAssertEqual(g.weapon.loaded,30)}
     func testUnseenPlayerIsNotAcquired(){let g=make();advance(g,200);XCTAssertFalse(g.enemies.contains{$0.detected});XCTAssertEqual(g.health,3)}
-    func testVisionIsRangeLimited(){let e=Enemy(id:0,position:.zero,home:.zero,beam:V3(0,0,-1),facing:V3(0,0,-1));XCTAssertTrue(Survival.inBeam(e,V3(0,7.6,-20)));XCTAssertFalse(Survival.inBeam(e,V3(0,7.6,-29)));XCTAssertFalse(Survival.inBeam(e,V3(15,7.6,-20)))}
+    func testVisionIsRangeLimited(){let e=Enemy(id:0,position:.zero,home:.zero,beam:V3(0,0,-1),facing:V3(0,0,-1));XCTAssertTrue(Survival.inBeam(e,e.sensor+V3(0,0,-20)));XCTAssertFalse(Survival.inBeam(e,e.sensor+V3(0,0,-29)));XCTAssertFalse(Survival.inBeam(e,e.sensor+V3(15,0,-20)))}
+    func testSensorMatchesHeadLens(){let e=Enemy(id:0,position:.zero,home:.zero,beam:V3(0,0,-1),facing:V3(0,0,-1));XCTAssertEqual(e.sensor.y,9.2,accuracy:0.001);XCTAssertEqual(e.sensor.z,-0.7,accuracy:0.001)}
     func testTravelStreamsLoot(){let g=make();let old=g.supplies.map{$0.id};g.step(dt:0.1,player:V3(25,0,0),noise:0,reliable:true,cover:{_ in true},blocked:{_,_ in false});XCTAssertTrue(g.supplies.contains{!old.contains($0.id)});XCTAssertLessThanOrEqual(g.supplies.count,12)}
     func testSupplyHeightAdjustsGradually(){let g=make();let old=g.supplies[0].position;g.groundSupplies(dt:0.1,ground:{_ in -3});XCTAssertLessThan(g.supplies[0].position.y,old.y);XCTAssertEqual(g.supplies[0].position.x,old.x)}
     func testMissingGroundPreservesLoot(){let g=make();let old=g.supplies[0].position;g.groundSupplies(dt:0.1,ground:{_ in nil});XCTAssertEqual(g.supplies[0].position,old)}
