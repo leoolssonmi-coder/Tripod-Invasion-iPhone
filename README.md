@@ -64,6 +64,14 @@ Inget Apple-konto behövs för själva osignerade molnkompileringen.
 
 ## Verifiering
 
+Mac-bygget den 3 november 2026 är godkänt: **14 Swift-tester, 0 fel**, Xcode Release
+för ARM64 och iOS 16+. Version 0.1.0, byggnummer 1. IPA-filens SHA-256 kontrollerad.
+
+- Byggprotokoll: https://github.com/leoolssonmi-coder/Tripod-Invasion-iPhone/actions/runs/41701180041
+- Nedladdning: https://github.com/leoolssonmi-coder/Tripod-Invasion-iPhone/releases/tag/iphone-2
+- **Inte signerat för en personlig enhet och inte fysiskt testat på iPhone.**
+
+
 Windows kan kontrollera filstruktur och paketering men inte kompilera ARKit mot iPhone SDK.
 `swift test` och `xcodebuild` måste godkännas på macOS innan en IPA kallas byggkontrollerad.
 En grön molnbyggning bevisar inte att kameran, mikrofonen, LiDAR eller spelbalansen fungerar
