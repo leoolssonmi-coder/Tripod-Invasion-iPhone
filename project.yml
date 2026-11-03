@@ -1,0 +1,38 @@
+name: TripodInvasion
+options:
+  bundleIdPrefix: se.tripod
+  deploymentTarget:
+    iOS: '16.0'
+settings:
+  base:
+    SWIFT_VERSION: '5.0'
+    TARGETED_DEVICE_FAMILY: '1,2'
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: '0.1.0'
+    CURRENT_PROJECT_VERSION: '1'
+targets:
+  TripodInvasion:
+    type: application
+    platform: iOS
+    sources:
+      - Sources/App
+      - Sources/Core
+    info:
+      path: Info.plist
+      properties:
+        CFBundleDisplayName: Tripod Invasion
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIRequiresFullScreen: true
+        NSCameraUsageDescription: Kameran visar AR-spelet och upptäcker riktiga skydd. Inga kamerabilder skickas iväg.
+        NSMicrophoneUsageDescription: Ljudnivån lockar tripoder. Tal tolkas inte och inget ljud sparas eller skickas.
+        UIRequiredDeviceCapabilities: [arkit, arm64]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: se.tripod.invasion.ios
+        GENERATE_INFOPLIST_FILE: NO
+schemes:
+  TripodInvasion:
+    build:
+      targets:
+        TripodInvasion: all
