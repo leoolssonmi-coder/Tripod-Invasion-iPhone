@@ -46,7 +46,13 @@ struct Enemy {
     var hitAt: Float = -100
     var stunUntil: Float = 0
     var arm: Int { max(0, attackCount - 1) % 2 }
-    var sensor: V3 { position + V3(0, 7.6, 0) }
+    var sensor: V3 {
+        let yaw = atan2(beam.x, beam.z)
+        let pitch = -asin(clamp(unit(beam).y,-1,1))
+        let y = -0.2*cos(pitch)-0.7*sin(pitch)
+        let z = -0.2*sin(pitch)+0.7*cos(pitch)
+        return position + V3(sin(yaw)*z,9.4+y,cos(yaw)*z)
+    }
 }
 struct Projectile { var origin: V3; var velocity: V3; var age: Float = 0; var position: V3 { origin + velocity * age + V3(0, -2.45 * age * age, 0) } }
 struct Shot { var from: V3; var to: V3; var age: Float = 0 }
