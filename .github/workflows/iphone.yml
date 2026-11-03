@@ -1,0 +1,48 @@
+name: Build iPhone IPA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+concurrency:
+  group: iphone-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  iphone:
+    # Deliberately refuses private-repository builds to avoid consuming paid macOS minutes.
+    if: github.event.repository.private == false
+    # No paid larger runner, no Apple credentials on GitHub.
+    runs-on: macos-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Test game logic
+        run: swift test
+      - name: Generate Xcode project
+        run: |
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          xcodegen generate
+      - name: Build for physical iPhone
+        run: |
+          xcodebuild -project TripodInvasion.xcodeproj -scheme TripodInvasion -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
+      - name: Package unsigned IPA for local AltStore signing
+        run: |
+          mkdir -p build/ipa/Payload
+          cp -R build/Build/Products/Release-iphoneos/TripodInvasion.app build/ipa/Payload/
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' build/ipa/Payload/TripodInvasion.app/Info.plist
+          file build/ipa/Payload/TripodInvasion.app/TripodInvasion
+          cd build/ipa
+          ditto -c -k --keepParent Payload Tripod-Invasion-iPhone-unsigned.ipa
+          shasum -a 256 Tripod-Invasion-iPhone-unsigned.ipa > SHA256.txt
+      - name: Publish public prerelease download (no Actions artifact storage)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "iphone-${GITHUB_RUN_NUMBER}" \
+            build/ipa/Tripod-Invasion-iPhone-unsigned.ipa build/ipa/SHA256.txt \
+            --target "$GITHUB_SHA" --prerelease \
+            --title "iPhone test build ${GITHUB_RUN_NUMBER}" \
+            --notes "Unsigned iPhone test build. Sign locally with AltStore Classic. Not physically tested."
